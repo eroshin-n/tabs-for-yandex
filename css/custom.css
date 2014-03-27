@@ -11,11 +11,21 @@
     min-width: 130px;
 
     text-align: center;
+    text-decoration: none;
+    color: black;
 
     border-style: solid;
 	border-width: 1px;
 
 	padding: 2px;
+}
+
+.tab-header:hover {
+	color: #428bca;
+}
+
+.selected {
+	background-color: lightgray;
 }
 
 .tab-content {
