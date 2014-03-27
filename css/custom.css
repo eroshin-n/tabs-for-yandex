@@ -63,10 +63,14 @@ body {
     width: 4.5%;
 }
 
-#console_output {
-    font-size: 12px;
-
+#console_output_wrapper {
     overflow-y: auto;
 
     height: 45%;
+}
+
+#console_output {
+    font-size: 12px;
+
+    overflow-y: hidden;
 }

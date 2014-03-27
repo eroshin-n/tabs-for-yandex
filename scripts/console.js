@@ -2,7 +2,8 @@ function Console (options) {
 
     var input = $('#field'), // это все можно было бы задавать через options
         output = $('#console_output'),
-        enter_button = $('#enter'),
+        outputWrapper = $('#console_output_wrapper'),
+        enterButton = $('#enter'),
         tabs = $('.tab-header'),
         tabsContainer = $('.tabs-header'),
         currentTab,
@@ -90,7 +91,7 @@ function Console (options) {
 
             clear: function() {
 
-                $(output).html('');
+                output.html('');
 
                 write('Консоль очищена <strike>Императором</strike>');
 
@@ -107,9 +108,11 @@ function Console (options) {
 
 ///////////////////////////////////////////// <замкнутые внутренние функции> /////////////////////////////////////////////
 
-    function write(text) {
+    function write(text) {console.log(output.height());
 
-        $(output).append('<br>> ' + text);
+        output.append('<br>> ' + text);
+
+        outputWrapper.scrollTop(output.height());
 
     };
 
@@ -118,7 +121,7 @@ function Console (options) {
      */
     function read() {// 
 
-        var text = $(input).val().trim(),
+        var text = input.val().trim(),
             regExp = /\(.*\)/; 
 
         write(text);
@@ -134,7 +137,7 @@ function Console (options) {
 
         historyStep = history.length;
 
-        $(input).val('');
+        input.val('');
 
         if(!regExp.test(text)) {// ищем круглые скобки, идущие в таком порядке: ()
             write('Для вызова команды введите: <имя команды>(аргумент1, аргумент2)');
@@ -165,7 +168,7 @@ function Console (options) {
 
         historyStep = historyStep == 0 ? historyStep : historyStep - 1;
 
-        $(input).val(history[historyStep]);
+        input.val(history[historyStep]);
 
     };
 
@@ -175,7 +178,7 @@ function Console (options) {
 
         historyStep = historyStep == historyLength ? historyLength : historyStep + 1;
 
-        $(input).val(history[historyStep]);
+        input.val(history[historyStep]);
 
     };
 
@@ -205,7 +208,7 @@ function Console (options) {
 
 ///////////////////////////////////////////// </замкнутые внутренние функции> /////////////////////////////////////////////
 
-    $(input).keyup(function(event) {
+    input.keyup(function(event) {
 
         switch(event.which) {
 
@@ -225,7 +228,7 @@ function Console (options) {
 
     });
 
-    $(enter_button).click(function() {
+    enterButton.click(function() {
 
         read();
 
