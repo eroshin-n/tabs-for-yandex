@@ -1,15 +1,15 @@
 $(document).ready(function() {
 
-    $('.tab-header').click(function() {
+    var userConsole = new Console({
+            autoTab: 0
+        });
 
-    	$('.selected').removeClass('selected');
-    	$(this).addClass('selected');
+    $('.tabs-header').on('click','.tab-header',function() {
 
-    	$('.tab-content').hide();
-		$($(this).attr('href')).show();
+        var tabIndex = $(this).index();
+
+        userConsole.commands.selectTab([tabIndex]);
 
     });
-
-    $('.tab-header:first').trigger('click');
 
 });

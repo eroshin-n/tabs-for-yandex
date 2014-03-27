@@ -1,32 +1,36 @@
 <html>
     <head>
+        <title>Tabs'n'Console</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <script src="./scripts/jquery-2.1.0.min.js"></script>
         <script src="./scripts/console.js"></script>
         <script src="./scripts/script.js"></script>
         <link rel="stylesheet" href="./css/custom.css"></link>
     </head>
     <body>
+
         <div class="tabs-header">
-        	<a class="tab-header" href="#tab_1">tab1</a>
-        	<a class="tab-header" href="#tab_2">tab2</a>
-        	<a class="tab-header" href="#tab_3">tab3</a>
+            <a class="tab-header" href="#tab_0">Loader</a>
+            <a class="tab-header" href="#tab_1">Stars</a>
+            <a class="tab-header" href="#tab_2">Text</a>
+        </div>
+        <div class="tab-content" id="tab_0">
+            0
         </div>
         <div class="tab-content" id="tab_1">
-        	tab # 1
+            1
         </div>
         <div class="tab-content" id="tab_2">
-        	tab # 2
+            2
         </div>
-        <div class="tab-content" id="tab_3">
-        	tab # 3
-        </div>
-	    <div class="console">
-	    	<div class="console_output">
 
-	    	</div>
-	        <div class="console_input">
-	        	<input type="text" class="field"><input type="button" class="button"value="Enter">
-	        </div>
-	    </div>
+        <div id="console">
+            <div id="console_output"></div>
+            <div id="console_input">
+                <input type="text" id="field">
+                <input type="button" id="enter" value="Enter">
+            </div>
+        </div>
+
     </body>
 </html>
