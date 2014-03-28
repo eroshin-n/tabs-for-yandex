@@ -166,7 +166,7 @@ function Console (options) {
 
     function history_step_backward() {
 
-        historyStep = historyStep == 0 ? historyStep : historyStep - 1;
+        historyStep = !historyStep ? historyStep : historyStep - 1;
 
         input.val(history[historyStep]);
 
@@ -174,9 +174,9 @@ function Console (options) {
 
     function history_step_forward() {
 
-        var historyLength = history.length - 1;
+        var historyLastPos = history.length - 1;
 
-        historyStep = historyStep == historyLength ? historyLength : historyStep + 1;
+        historyStep = historyStep == historyLastPos ? historyLastPos : historyStep + 1;
 
         input.val(history[historyStep]);
 
