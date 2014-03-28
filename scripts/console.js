@@ -1,16 +1,21 @@
 function Console (options) {
 
-    var input = $('#field'), // это все можно было бы задавать через options
+    var input = $('#field'),
         output = $('#console_output'),
         outputWrapper = $('#console_output_wrapper'),
         enterButton = $('#enter'),
         tabs = $('.tab-header'),
         tabsContainer = $('.tabs-header'),
-        currentTab,
+
         autoTab = options.autoTab ? options.autoTab : 0,
-        historyStep = 0,
-        historyLimit = 10,
-        history = [],
+        currentTab, // номер текущего таба
+
+        inputHistoryStep = 0,
+        inputHistoryLimit = 10,
+        inputHistory = [],
+
+        usageHistory = [], // массив Timer'ов, по одному на вкладку
+
         helpText = 'Список доступных комманд:' +
                '<br>-selectTab(tabIndex) — выбор таба с индексом tabIndex;' +
                '<br>-swapTabs(tabIndex1, tabIndex2) — поменять местами табы tabIndex1 и tabIndex2;' +
@@ -37,9 +42,15 @@ function Console (options) {
                     return;
                 } else {
 
+                    var tab = $(tabs[tabIndex]),
+                        prevTab = $(tabs[currentTab]);
+
                     currentTab = tabIndex;
 
-                    var tab = $(tabs[tabIndex]);
+                    if(prevTab.attr('href')) //для первого запуска
+                        usageHistory[prevTab.attr('href')].pause(); 
+
+                    usageHistory[tab.attr('href')].start();
 
                     $('.selected').removeClass('selected');
                     tab.addClass('selected');
@@ -83,10 +94,29 @@ function Console (options) {
                 
                 write('Свопнули табы №' + tabIndex1 + ' "'+ $(tabs[tabIndex2]).html() + 
                                 '" и №' + tabIndex2 + ' "'+ $(tabs[tabIndex1]).html() + '"');
+
             },
 
             showStat: function() {
-                // допиши меня
+
+                var summ = 0,
+                    tabsText = '';
+
+                tabs.each(function() {
+
+                    var tab = $(this),
+                        key = tab.attr('href')
+
+                    summ += usageHistory[key].getValue();
+
+                    tabsText += '<br>№' + tab.index() + ' "' + tab.html() + '": ' + make_readable(usageHistory[key].getValue());
+
+                });
+
+                var text = 'Общее время работы: ' + make_readable(summ) + ';' + '<br>по табам:' + tabsText;
+
+                write(text);
+
             },
 
             clear: function() {
@@ -108,7 +138,7 @@ function Console (options) {
 
 ///////////////////////////////////////////// <замкнутые внутренние функции> /////////////////////////////////////////////
 
-    function write(text) {console.log(output.height());
+    function write(text) {
 
         output.append('<br>> ' + text);
 
@@ -119,7 +149,7 @@ function Console (options) {
     /**
      * Чтение из поля ввода: парсинг входной строки, проверка на существование команды, вызов команды
      */
-    function read() {// 
+    function read() { 
 
         var text = input.val().trim(),
             regExp = /\(.*\)/; 
@@ -128,14 +158,14 @@ function Console (options) {
 
         if(!text) return;
 
-        if(history.length == historyLimit) {
-            history.shift();
-            history.push(text);
+        if(inputHistory.length == inputHistoryLimit) {
+            inputHistory.shift();
+            inputHistory.push(text);
         } else {
-            history.push(text);
+            inputHistory.push(text);
         };
 
-        historyStep = history.length;
+        inputHistoryStep = inputHistory.length;
 
         input.val('');
 
@@ -164,21 +194,21 @@ function Console (options) {
         
     };
 
-    function history_step_backward() {
+    function input_history_step_backward() {
 
-        historyStep = !historyStep ? historyStep : historyStep - 1;
+        inputHistoryStep = !inputHistoryStep ? inputHistoryStep : inputHistoryStep - 1;
 
-        input.val(history[historyStep]);
+        input.val(inputHistory[inputHistoryStep]);
 
     };
 
-    function history_step_forward() {
+    function input_history_step_forward() {
 
-        var historyLastPos = history.length - 1;
+        var inputHistoryLastPos = inputHistory.length - 1;
 
-        historyStep = historyStep == historyLastPos ? historyLastPos : historyStep + 1;
+        inputHistoryStep = inputHistoryStep == inputHistoryLastPos ? inputHistoryLastPos : inputHistoryStep + 1;
 
-        input.val(history[historyStep]);
+        input.val(inputHistory[inputHistoryStep]);
 
     };
 
@@ -206,6 +236,66 @@ function Console (options) {
 
     };
 
+    /**
+     * Получает секунды и возвращает читабельную строку
+     *
+     * @param seconds
+     * @return {string} 'M минут S секунд'
+     */
+    function make_readable(seconds) { 
+
+        var minutes = Math.floor(seconds / 60),
+            seconds = seconds % 60,
+            result = '';
+
+        if(minutes)
+            result += minutes + ' минут' + correct_ending(minutes) + ' ';
+
+        if(seconds)
+            result +=  seconds + ' секунд' + correct_ending(seconds);
+
+        return result || 'нисколько';
+
+    };
+
+    /**
+     * Получает число и возвращает корректное окончание слова
+     *
+     * @param seconds
+     * @return {string} '', 'а', 'ы'
+     */
+    function correct_ending(number) { 
+
+        if(number == 11 || number == 12 || number == 13 || number == 14)
+            return '';
+
+        var number = number % 10;
+
+        switch(number) {
+
+            case 0:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+                return '';
+            break;
+
+            case 1:
+                return 'а';
+            break;
+
+            case 2:
+            case 3:
+            case 4:
+                return 'ы';
+            break;
+
+        };
+
+    };
+
 ///////////////////////////////////////////// </замкнутые внутренние функции> /////////////////////////////////////////////
 
     input.keyup(function(event) {
@@ -217,20 +307,26 @@ function Console (options) {
             break;
 
             case 38: //up
-                history_step_backward();
+                input_history_step_backward();
             break;
 
             case 40: //down
-                history_step_forward();
+                input_history_step_forward();
             break;
 
-        }
+        };
 
     });
 
     enterButton.click(function() {
 
         read();
+
+    });
+
+    tabs.each(function() {
+
+        usageHistory[$(this).attr('href')] = new Timer();
 
     });
 
