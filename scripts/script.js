@@ -1,8 +1,6 @@
 $(document).ready(function() {
 
-    var userConsole = new Console({
-            autoTab: 0
-        });
+    var userConsole = new Console();
 
     $('.tabs-header').on('click','.tab-header',function() {
 

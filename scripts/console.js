@@ -1,4 +1,4 @@
-function Console (options) {
+function Console () {
 
     var input = $('#field'),
         output = $('#console_output'),
@@ -7,7 +7,9 @@ function Console (options) {
         tabs = $('.tab-header'),
         tabsContainer = $('.tabs-header'),
 
-        autoTab = options.autoTab ? options.autoTab : 0,
+
+        lastTab = document.cookie.replace(/(?:(?:^|.*;\s*)last_tab\s*\=\s*([^;]*).*$)|^.*$/, "$1"),
+        autoTab = lastTab ? lastTab : 0,
         currentTab, // номер текущего таба
 
         inputHistoryStep = 0,
@@ -46,6 +48,8 @@ function Console (options) {
                         prevTab = $(tabs[currentTab]);
 
                     currentTab = tabIndex;
+
+                    document.cookie = 'lastTab=' + currentTab;
 
                     if(prevTab.attr('href')) //для первого запуска
                         usageHistory[prevTab.attr('href')].pause(); 
