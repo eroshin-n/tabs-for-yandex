@@ -7,7 +7,6 @@ function Console () {
         tabs = $('.tab-header'),
         tabsContainer = $('.tabs-header'),
 
-
         lastTab = document.cookie.replace(/(?:(?:^|.*;\s*)last_tab\s*\=\s*([^;]*).*$)|^.*$/, "$1"),
         autoTab = lastTab ? lastTab : 0,
         currentTab, // номер текущего таба
@@ -49,7 +48,7 @@ function Console () {
 
                     currentTab = tabIndex;
 
-                    document.cookie = 'lastTab=' + currentTab;
+                    document.cookie = 'last_tab=' + currentTab;
 
                     if(prevTab.attr('href')) //для первого запуска
                         usageHistory[prevTab.attr('href')].pause(); 
