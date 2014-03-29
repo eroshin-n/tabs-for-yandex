@@ -8,6 +8,8 @@ $(document).ready(function() {
 
         userConsole.commands.selectTab([tabIndex]);
 
+        return false;
+
     });
 
 });
