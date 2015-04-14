@@ -1,0 +1,8 @@
+node_modules/
+launch.cmd
+
+# bem and libs
+libs/
+.enb/tmp/
+*.bundles*/*/*.*
+!*.bundles*/*/*.bemjson.js
