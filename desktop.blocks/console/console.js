@@ -5,14 +5,13 @@ modules.define('console', ['i-bem__dom', 'jquery'], function(provide, BEMDOM, $)
             js: {
                 inited: function() {
                     this._input = this.findBlockInside('input');
-                    this.findBlockInside('button').bindTo('click', this._onButtonClick);
+                    this.findBlockInside('button').bindTo('click', this._onButtonClick.bind(this));
                 }
             }
         },
         _onButtonClick: function(e) {
             e.preventDefault();
-            this.emit('exec');
-            console.log('exec!');
+            this.emit('exec', { val: this._input.getVal() });
         }
     }));
 

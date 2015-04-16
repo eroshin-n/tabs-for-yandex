@@ -1,6 +1,11 @@
 ({
     shouldDeps: [
-        { block: 'tab' },
+        { 
+            block: 'tab', 
+            elems : [
+                { elem: 'content', mods: { 'visible': true } }
+            ]
+        },
         { block: 'console' }
     ]
 })
