@@ -9,12 +9,12 @@ modules.define('tab', ['i-bem__dom', 'i-bem', 'jquery'], function(provide, BEMDO
                     this._tabId = tabCounter;
                     this._content = this.findElem('content');
                     tabCounter += 1;
-                    BEM.blocks['console'].on('exec', this._onExec.bind(this));
+                    BEM.blocks['console'].on('selectTab', this._selectTab.bind(this));
                 }
             }
         },
-        _onExec: function(e, data) {
-            if(data.val == this._tabId)
+        _selectTab: function(e, tabIndex) {
+            if(tabIndex == this._tabId)
                 this.setMod(this._content, 'visible', true);
             else
                 this.setMod(this._content, 'visible', false);
