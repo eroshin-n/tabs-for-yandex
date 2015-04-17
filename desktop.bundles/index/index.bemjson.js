@@ -55,7 +55,8 @@
                                 block: 'input',
                                 mods: { theme: 'islands', size: 's', 'has-clear' : true },
                                 name: 'query',
-                                placeholder: 'Try to put in some commands'
+                                placeholder: 'Try to put in some commands',
+                                autocomplete : false
                             },
                             {
                                 block : 'button',
